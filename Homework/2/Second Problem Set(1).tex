@@ -1,0 +1,123 @@
+\documentclass{article}
+
+\usepackage{fullpage}
+\usepackage{amsmath,amsfonts,amsthm,amssymb}
+\usepackage[noline,noend,linesnumbered]{algorithm2e}
+
+\begin{document}
+\title{CS 457, Data Structures and Algorithms I\\
+Second Problem Set}
+\date{October 8, 2019}
+\maketitle
+\begin{center}
+\textbf{Due on October 16. Collaboration is \textbf{not} allowed. Contact Daniel and me for questions.}
+\end{center}
+\begin{enumerate}
+
+
+\item (24 pts)
+Solve the following recurrence equation (tight upper \emph{and} lower bounds!)
+\begin{equation*}
+T(n)=
+\begin{cases}
+1 &\text{if $n< 1$}\\
+2T(n/2)+23 &\text{otherwise.}
+\end{cases}
+\end{equation*}
+
+\begin{itemize}
+\item [a)] Using the \emph{master theorem}. Make sure to explain which case applies and why.
+\item [b)] Using the \emph{recursion tree} method. Do not use asymptotic notation for the depth of the recursion tree; use exact upper and lower bounds instead. 
+\item [c)] Using the \emph{substitution} method. Make sure to show that the boundary conditions hold as well; choose the constants $c$ and $n_0$ appropriately.
+\end{itemize}
+
+
+
+\item (30 pts)
+For the following algorithm calls, prove a {\em tight} asymptotic bound for their worst-case running time. Pay attention to the input in the algorithm \emph{calls}!
+
+\begin{itemize}
+\item [a)] The call to \textsc{Recursive-Algorithm}($n$) for some $n>1$.
+\vspace{10pt}
+
+\begin{algorithm}[H]
+\textsc{Recursive-Algorithm}($a$)\;
+$q=0$\;
+\If{$a\geq 1$}{
+	\For{$i=1$ \KwTo $\lfloor a\rfloor$}{q=q+1}
+	\textsc{Recursive-Algorithm}($a/2$)\;
+	\textsc{Recursive-Algorithm}($a/5$)\;
+	\textsc{Recursive-Algorithm}($a/9$)\;
+
+}
+\end{algorithm}
+
+
+\vspace{.3in}
+
+\item[b)] The call to \textsc{Recursive-Algorithm2}($n,n$) for some $n>2$.
+\vspace{10pt}
+
+\begin{algorithm}[H]
+\textsc{Recursive-Algorithm2}($a, b$)\;
+\If{$a\geq 2$ ~and~ $b\geq 2$}{
+	$u=a/3$\;
+	$v=b-1$\;
+	\textsc{Recursive-Algorithm2}($u, v$)\;
+}
+\end{algorithm}
+\end{itemize}
+
+\newpage
+\item (30 pts) In solving the following recurrence equations, first try to use the master theorem. If it does not apply, explain why this is the case.
+
+\begin{itemize}
+\item [a)] Solve the following recurrence equation.
+\begin{equation*}
+T(n) = 
+\begin{cases}
+1 &\text{if $n\leq 1$}\\
+T(2n/3)+T(n/4)+\Theta(n) &\text{otherwise.}
+\end{cases}
+\end{equation*}
+\item [b)] Solve the following recurrence equation.
+one
+\begin{equation*}
+T(n) = 
+\begin{cases}
+1 &\text{if $n\leq 1$}\\
+4T(n/2)+n^2/\log n &\text{otherwise.}
+\end{cases}
+\end{equation*}
+
+\item [c)] For the following equation provide an exact (\emph{not asymptotic}) closed form solution.
+\begin{equation*}
+T(n) = 
+\begin{cases}
+1 &\text{if $n\leq 1$}\\
+5T(n/2) &\text{otherwise.}
+\end{cases}
+\end{equation*}
+\end{itemize}
+
+
+\item (16 pts) Consider the following variation of Merge Sort: rather than dividing the array into
+two equal sized parts, recursively sorting each of them, and then merging them together, we divide
+the array into $\sqrt{n}$ equal sized parts instead. Once we recursively sort each one of these
+$\sqrt{n}$ parts of size $\sqrt{n}$ each, we need $\Theta(n\lg n)$ time in order to merge them together,
+leading to the following recurrence equation:
+\begin{equation*}
+T(n)=
+\begin{cases}
+1 &\text{if $n\leq 1$}\\
+\sqrt{n}T(\sqrt{n})+n\lg n &\text{otherwise.}
+\end{cases}
+\end{equation*}
+Solve this recurrence equation, providing tight upper and lower bounds
+\begin{itemize}
+\item [a)] Using the \emph{recursion tree} method. 
+\item [b)] Using the \emph{master theorem} after applying an appropriate change of variables.
+\end{itemize}
+
+\end{enumerate}
+\end{document}
