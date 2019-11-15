@@ -4,6 +4,7 @@
 \usepackage{listings}
 \usepackage{amsmath}
 \usepackage[hidelinks]{hyperref}
+\usepackage{graphicx}
 
 \lstset{
     basicstyle=\ttfamily,
@@ -30,7 +31,9 @@ then explain why such an assignment cannot exist, using the fact that the tree n
 red-black properties. You can use the applet \url{https://www.cs.usfca.edu/~galles/visualization/RedBlack.html}
 and read through Chapter 13 from your textbook if you would like to better understand how red-black trees work.
 
-INSERT IMAGE HERE
+\begin{figure}[h]
+    \includegraphics[width=\linewidth]{full_RB_tree.jpg}
+\end{figure}
 
 Insertion order:
 8,4,12,2,14,6,10,1,3,5,7,9,11,13,15
@@ -42,7 +45,22 @@ $k$-ary tree that has $x$ internal nodes has exactly $kx+1$ nodes in total. Note
 \emph{binary} trees, i.e., when $k=2$, this would imply that the total number of nodes is $2x+1$,
 which would verify what Cameron suggested in class (that the total number of nodes of full binary
 trees is always odd).
-
+\\
+\\
+For the base case we can look at a tree with one node. This tree has $0$ internal nodes so we have $k\cdot 0 + 1=1$ node in our tree.
+\\
+For our inductive step we can look at how we can add nodes to increase our internal node count.
+We can select any leaf, we can't choose an internal node to add nodes to as they would become over-populated.
+With the leaf we must add k leaves so that our tree is still complete.
+Doing so causes our chosen leaf to become an internal node and adds k new nodes.
+\\
+Assume that any $k$-ary tree that has $n$ internal nodes has exactly $kx+1$ nodes in total.
+To show that this holds for $n+1$ internal nodes we begin with our assumption for n.
+$$Total \; nodes = kn+1$$
+Based on the argument above selecting a leaf to add new nodes to increases our internal node count by $1$, $n'=n+1$, and increases our total node count by $k$, $Total \; nodes'=kn+1+k$.
+Rearranging these terms we get
+$$Total \; nodes' = k(n+1)+1 = kn'+1$$
+Which agrees with our original equation for n+1.
 
 
 \section*{Question 3}
@@ -51,7 +69,7 @@ nodes of height $h$ in any $n$-element heap. Make sure to clearly state your bas
 inductive step arguments. Also note that you need to prove the aforementioned upper bound for the
 number of nodes of height $h$ for \emph{every} value of $n$ and \emph{every} $n$-element heap.
 
-Heaps - neary complete binary tree except for, possibly, the lowest level
+Heaps - nearly complete binary tree except for, possibly, the lowest level
 
 
 \section*{Question 4}
@@ -72,6 +90,14 @@ for the fifth and final month. The total cost in this case would be $e_1+e_2+c+ 
 two costs of $c$ are due to the change of coast. Provide detailed pseudocode for your proposed algorithm, as
 well as an explanation regarding why it works and why its running time is indeed $O(n)$.
 
+For each month keep track of the best way to get to that coast for that month.
+\\
+We find the solution by solving two subproblems, one for the best way to end on the east coast for month i, and the other being the same but for the west coast., one for the best way to end on the east coast for month i, and the other being the same but for the west coast.
+
+
+
+
+
 \section*{Question 5}
 You are planning to attend a music and arts festival that hosts multiple events that
 you are interested in, but many of these events may (partially) overlap. Assume that you get some value
@@ -85,5 +111,6 @@ $f_i\leq s_j$ or $f_j \leq s_i$ (no overlap) and the total value $\sum_{i\in E'}
 detailed pseudocode for your proposed algorithm (you can use sorting as a subroutine), as well as an explanation
 regarding why it works and why its running time is indeed $O(n\log n)$.
 
+sort by start times, then basically apply the same algorithm as in question 4.
 
 \end{document}
