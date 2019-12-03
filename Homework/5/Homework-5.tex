@@ -19,5 +19,77 @@
 
 \maketitle
 
+\section*{Question 1}
+Consider a variation of the $\textsc{Strongly-Connected-Components}(G)$ (see Page 617 of your textbook) which, rather than calling DFS($G^T$) in Step 3, calls DFS($G$) instead (everything else remains the same).
+Provide a graph $G=(V, E)$ for which this variation is incorrect, i.e., it does not output the correct set of strongly connected components of $G$.
+For full credit, explain what the variation of the algorithm would do for this graph $G$:
+\begin{itemize}
+\item[i.] provide $v.d$ and $v.f$ for all $v\in V$ for Step 1 (you can choose the initial ordering of the vertices),
+\item[ii.] provide $v.d$ and $v.f$ for all $v\in V$ for Step 3,
+\item[iii.] provide the set of connected components that it would output, and
+\item[iv.] explain why this output is incorrect.
+\end{itemize}
+
+We can look at the simplest graph containing two nodes with one directed edge between them. Each node is its own strongly connected component.
+$$G={V:{A,B}, E:{(A,B)}}$$
+
+\begin{itemize}
+\item[i.] If we start at node $B$ \
+$$B : v.d = 0 \quad v.f = 1 \qquad A : v.d = 2 \quad v.f = 3$$
+\item[ii.] We start at node $A$ as wee it finished last and run DFS again. We get \\
+$$A : v.d = 0 \quad v.f = 3 \qquad B : v.d = 1 \quad v.f = 2$$
+\item[iii.] The nodes $A$ and $B$ make the edges of a tree in step 3 so nodes $A$ and $B$ are a SCC
+\item[iv.] This is incorrect as $B$ can not get back to $A$ as it has no path so they should not be in the same SCC.
+\end{itemize}
+
+\section*{Question 2}
+Provide an algorithm that, given a directed acyclic graph $G=(V, E)$ and two vertices $s, t\in V$, returns the number of simple paths from $s$ to $t$ in $G$.
+Your algorithm's worst-case running time should be $O(m +n)$.
+\\ \\
+We start by topologically sorting since we have a DAG.
+Then we initialize a list containing the number of simple paths to the destination node to be zero for all elements, except for the destination node we set the path count to 1 as there is 1 path from there to itself.
+After we traverse through the topologically sorted list of nodes starting from the destination node working towards the source node, so in reverse order.
+At each node we look at all edges that the node is the destination to, or all outgoing edges of the transpose of the graph.
+From there we compute the new path count of the parent node, from the original graph, by adding its current path count of the node to the current path count of the node we are on.
+Continuing the process until we reach the source node, at that time all nodes will have propogated the counts up since we are traversing from the reverse of the topological sort.
+We then return the value of the simple paths count list for the source node.
+
+\begin{lstlisting}
+function simplePathCountDAG(G, s, t):
+    sorted = toplogocalSort(G)
+
+    // set initial path count to zero for all nodes
+    // initializes too many elements in most cases but O(vertices)
+    simplePathCount = {0}*|G.V|
+    // initialize path count from destination to 1
+    simplePathCount[t] = 1
+
+    // start from the destination node (t) and traverse in the opposite order
+    // of the topo sort until the last node before the source node (s)
+    for node from t to (s-1) in sorted.reversed():
+        for edge to node: // each edge that goes to node
+            simplePathCount[edge.source] += simplePathCount[node]
+    return simplePathCount[s]
+
+\end{lstlisting}
+
+The runtime of this algorithm iterates over each vertex and edge at most once since we are looking at a dag $O(n+m)$, and we toposort once which is also $O(n+m)$.
+Therefore our algorithm is also $O(n+m)$
+
+\section*{Question 3}
+An Eulerian tour of a strongly connected directed graph $G=(V, E)$ is a directed cycle that contains {\em every} edge in $E$ exactly once (at least once and no more than once).
+First, prove that $G$ has an Eulerian tour {\em if and only if} every vertex in $V$ has its in-degree equal to its out-degree.
+Then, using this fact, provide a $O(m)$ algorithm that returns an Eulerian tour of $G$, if one exists, or reports that no Eulerian tour exists.
+Hint: your algorithm can merge edge-disjoint cycles.
+
+\section*{Question 4}
+Provide a DFS-based algorithm that takes as input a graph $G=(V,E)$ and determines if there exists an edge $e\in E$ such that removing $e$ from $E$ increases the number of connected components of $G$.
+If such an edge exists, your algorithm should return all of the edges in $E$ with this property.
+For instance, if $V=\{v_1, v_2, v_3\}$ and $E=\{(v_1, v_2), (v_2, v_3)\}$, then $G=(V,E)$ has a single connected component.
+Removing either one of the two edges in $E$ would increase the connected components from one to two, so the algorithm should return both of these edges in this example.
+The worst-case running time of the algorithm should be $O(m+n)$.
+
+
+
 
 \end{document}
