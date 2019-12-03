@@ -31,7 +31,7 @@ For full credit, explain what the variation of the algorithm would do for this g
 \end{itemize}
 
 We can look at the simplest graph containing two nodes with one directed edge between them. Each node is its own strongly connected component.
-$$G={V:{A,B}, E:{(A,B)}}$$
+$$G=\{V:\{A,B\}, E:\{(A,B)\}\}$$
 
 \begin{itemize}
 \item[i.] If we start at node $B$ \
@@ -81,6 +81,27 @@ An Eulerian tour of a strongly connected directed graph $G=(V, E)$ is a directed
 First, prove that $G$ has an Eulerian tour {\em if and only if} every vertex in $V$ has its in-degree equal to its out-degree.
 Then, using this fact, provide a $O(m)$ algorithm that returns an Eulerian tour of $G$, if one exists, or reports that no Eulerian tour exists.
 Hint: your algorithm can merge edge-disjoint cycles.
+\\ \\
+We can show the in-degree and out-degree must be equal using a proof by contradiction.
+Assume a graph has an Eulerian tour with a node that has a nonequal number of in-degrees when compared to its out-degree.
+When we reach that node we must enter and leave it every time or else we cannot be in a cycle as we would get stuck at this node.
+Each time we enter and leave the node we decrease the in and out degrees as we cannot reuse edges.
+If our node had an unequal in vs out-degree then it could not be a Eulerian cycle.
+\\ QED. \\
+
+Start by picking a vertex to start at and begin traversing the graph until we return to this vertex.
+We can only travel though unused edges as we are constructing a eulerian path.
+If we reach a dead end, no place to travel, then we cannot construct an Eulerian path as the node we are stuck on must have an unequal in vs out-degree.
+If not we will eventually reach our initial node again. From there we have a single cycle, but we may not have an eulerian cycle.
+If we have unselected edges we must run this algorithm again starting from a node in the cycle with an unselected edge so that we have two cycles that need to be merged together.
+In order to merge the cycles we swap the edges leaving the common node so that they become one path.
+If we continue this process we will eventually use all the edges and merge everything together giving us an Eulerian path.
+If we reach a point where we have no valid options for selecting nodes within our graph with unused edges then the graph will not have a Eulerian path as we have two separate graphs.
+\\
+In this algorithm we iterate over the edges so we have $O(m)$.
+
+
+
 
 \section*{Question 4}
 Provide a DFS-based algorithm that takes as input a graph $G=(V,E)$ and determines if there exists an edge $e\in E$ such that removing $e$ from $E$ increases the number of connected components of $G$.
@@ -88,8 +109,13 @@ If such an edge exists, your algorithm should return all of the edges in $E$ wit
 For instance, if $V=\{v_1, v_2, v_3\}$ and $E=\{(v_1, v_2), (v_2, v_3)\}$, then $G=(V,E)$ has a single connected component.
 Removing either one of the two edges in $E$ would increase the connected components from one to two, so the algorithm should return both of these edges in this example.
 The worst-case running time of the algorithm should be $O(m+n)$.
-
-
+\\ \\
+When finding strongly connected components our last DFS-based on the transpose the number of unique trees that can be made gives us our SCC count.
+If we wanted to increase this we would need to increase the number of trees, to do this we can modify the SCC algorithm.
+When doing the third step with finding the trees we need to take note of any node that only has one outgoing edge.
+If we remove that edge then we will increase our SCC count as it will force a new tree to be made, so we add that edge to the list.
+Once we go through each node in our transposed graph we return the list.
+Since the algorithm runs the normal SCC alogrithm with a small change that takes constant time (seeing if outgoing edge count $> 1$) we have the same runtime of $O(n+m)$
 
 
 \end{document}
