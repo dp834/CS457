@@ -5,6 +5,7 @@
 \usepackage{amsmath}
 \usepackage[hidelinks]{hyperref}
 \usepackage{graphicx}
+\usepackage{amssymb}
 
 \lstset{
     basicstyle=\ttfamily,
@@ -19,5 +20,88 @@
 
 \maketitle
 
+\section*{Question 1}
+Your textbook defines the \emph{connected components} of undirected graphs and the \emph{strongly connected components} of directed graphs (see pages 1170-1171).
+Adding edges to a graph increases the connectivity and may lead to a decrease in the number of such components.
+i) If you add an edge to an undirected graph $G$, what is the largest possible drop in the number of connected components of $G$ that this can possibly lead to? Similarly,
+ii) if $G$ is a directed graph and you add a directed edge to it, what is the largest possible drop in the number of strongly connected components of $G$ that this can lead to? Provide both upper and lower bound arguments to support your claims.
+For instance, if you claim that the largest possible drop is $n/4$, then provide an example where the drop is $n/4$ and an argument why it can be no more than $n/4$ in general.
+
+\begin{enumerate}
+\item[i.] It is only possible to decrease the number of connected components in a undirected graph by $1$.
+Since connected components in an undirected graph is just a test of connectivity to we can only decrease the number by joining to subgraph that aren't connected.
+Connecting a two subgraphs that share no edges or vertices takes one edge joining a vertex in each distinct subgraph.
+If we could connect three groups with one new edge then it would imply that we were able to reach one of the groups via another group.
+I'm not sure how to give good proof/intuition of this.
+
+\item[ii.] It is possible to go from a graph with $n$ distinct SSC in a directed graph to go to a single $1$ SCC by adding one edge.
+If you have a path of $n$ nodes and $n-1$ edges such that there are no cycles then we have a path from $u$ to $v$ where $u$ is the starting node and $v$ is the ending node.
+if we add one edge connecting these two so that there is a now a cycle then every node is now able to reach every other node thus we now only have 1 SCC in our graph where we previously had n.
+We cant decrease it more than having only one SCC in a graph so that is the best that we can do.
+
+\end{enumerate}
+
+
+
+\section*{Question 2}
+You are given a weighted graph $G=(V, E)$ as well as a minimum spanning tree $T$ of $G$.
+Then, a new edge $e$ is added to $G$ and you want to compute a minimum spanning tree for the new graph $G'=(V, E\cup\{e\})$.
+Provide an algorithm $\textsc{New-MST}(G,T,e)$ that computes a minimum spanning tree $T'$ for $G'$ in time $O(n)$.
+Clearly, $T'$ could be computed from scratch using Prim's or Kruskal's algorithm, or one could use algorithms covered in recitation, but all of these solutions would require time $\omega(n)$ which is not good enough.
+\\
+\\
+We take the MST of $G$ and add the new edge to it.
+On this graph we look for the cycle that is formed since we now have $n$ edges for $n$ nodes using a depth first search and comparing the finish times.
+Then we find the largest weight edge from the cycle and remove it from the MST.
+Since we there are only as many edges as vertices the algorithm will be $O(n)$ as the search for a cycle is $O(n+m)$ and $n=m$ so $O(n)$.
+Finding the largest weight edge from that cycle will take at most $O(n)$ if every edge is in the cycle.
+We are doing two things that are $O(n)$ so we are still $O(n)$.
+
+\section*{Question 3}
+You are given a directed graph $G=(V,E)$ along with a function $w:E\to \mathbb{R_+}$ that assigns positive weights to all the edges.
+This graph may contain directed cycles and your goal is to check if such cycles exist in $G$ and, if they do, to return one with the smallest possible weight.
+The running time of your algorithm should be $O(n^3)$ or $O(n^2m)$ (whichever one you prefer).
+You can use any algorithm from Chapter 24 as a subroutine.
+\\
+\\
+For each vertex in our graph we can run a modified dijkstra's algorithm to find the minimum weight cycle.
+We then get the smallest weight cycle that was found across all nodes and return it.
+The modified dijkstra's will start at the source vertex and traverse the cheapest edge to a unused node (the source node is marked as unused)
+It will continue to take the cheapest edge to a new vertex.
+If we get to the source vertex we have a path and we took the cheapest route as there are no negative weights.
+
+\begin{lstlisting}
+def findMinCycle(G,w):
+    best = inf
+    cycle = []
+    for vertex in G:
+        newCycle = findCheapestCycle(G,w,s)
+        // if vertex is not part of a cycle
+        if(cycle == null):
+            continue
+        if(getCycleWeight(newCycle) < best):
+            best = getCycleWeight(newCycle)
+            cycle = newCycle
+    return cycle
+
+//Our source is the same as our destination so we get a cycle
+def findCheapestCycle(G, w, s)
+    // this select the cheapest nonused edge from what is visible each time
+    // once we reach our starting vertex again we have found the cheapest cycle
+    // if we never find the initial vertex then it's not part of a cycle so return null
+
+    // starting at the source node take all outgoing edges and add them to a minheap
+    // while minheap is not empty
+        // extract min weighted edge to a new node
+        // if we are at the source/starting node get the cycle by following
+            // the parent marks and return the cycle
+        // mark new node as visited
+
+    // if we reach this we didn't return to the source node after visiting all nodes
+    // so we return null
+
+\end{lstlisting}
+
+The runtime is the same as doing a dijkstras over each vertex so it is $O(n^3)$
 
 \end{document}
